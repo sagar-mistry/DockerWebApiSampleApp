@@ -12,10 +12,12 @@ builder.WebHost.UseKestrel(options =>
     options.ListenAnyIP(8080);
 
     //HTTPS
-    options.ListenAnyIP(8081, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    });
+    //options.ListenAnyIP(8081, listenOptions =>
+    //{
+    //    var certificatePath = "C:\\Users\\DELL\\source\\repos\\DockerWebApiSampleApp\\your-certificate.pfx";
+    //    var certificatePassword = "your-certificate-password";
+    //    listenOptions.UseHttps(certificatePath, certificatePassword);
+    //});
 });
 var app = builder.Build();
 

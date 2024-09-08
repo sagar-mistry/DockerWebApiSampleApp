@@ -28,7 +28,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -46,4 +45,12 @@ RUN dotnet publish "./DockerWebApiSampleApp.csproj" -c $BUILD_CONFIGURATION -o /
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Copy the SSL certificate into the container
+COPY your-certificate.pfx /root/.aspnet/https/your-certificate.pfx
+
+# Set environment variables for the certificate path and password
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/your-certificate.pfx
+ENV ASPNETCORE_Kestrel__Certificates__Default__KeyPassword=your-certificate-password
+
 ENTRYPOINT ["dotnet", "DockerWebApiSampleApp.dll"]
